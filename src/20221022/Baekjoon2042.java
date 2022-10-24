@@ -26,7 +26,7 @@ class Main {
 			input = br.readLine().split(" ");
 			
 			if ("1".equals(input[0])) {
-				// 1. ¼ö ¹Ù²Ù±â
+				// 1. ìˆ˜ ë°”ê¾¸ê¸°
 				int idx = Integer.parseInt(input[1]) - 1;
 				long to = Long.parseLong(input[2]);
 				long from = numbers[idx];
@@ -37,7 +37,7 @@ class Main {
 				}
 			}
 			else {
-				// 2. ÇÕ ±¸ÇÏ±â
+				// 2. í•© êµ¬í•˜ê¸°
 				int fromIdx = Integer.parseInt(input[1]) - 1;
 				int toIdx = Integer.parseInt(input[2]) - 1;
 				
@@ -56,6 +56,6 @@ class Main {
 
 
 /**
-  * 2042. ±¸°£ ÇÕ ±¸ÇÏ±â
+  * 2042. êµ¬ê°„ í•© êµ¬í•˜ê¸°
   * 
 **/

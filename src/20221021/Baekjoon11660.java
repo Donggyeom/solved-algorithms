@@ -8,7 +8,7 @@ class Main {
 		int D = Integer.parseInt(input[0]);
 		int K = Integer.parseInt(input[1]);
 		
-		int[] pivDP = new int[K-1];	// K = piv[K-3]*a + piv[K-2]*b, a=Ã¹¹øÂ°³¯ ¶±ÀÇ°³¼ö 
+		int[] pivDP = new int[K-1];	// K = piv[K-3]*a + piv[K-2]*b, a=ì²«ë²ˆì§¸ë‚  ë–¡ì˜ê°œìˆ˜ 
 
 
 		System.out.println();

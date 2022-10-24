@@ -8,7 +8,7 @@ class Baekjoon2502 {
 		int K = Integer.parseInt(input[1]);
 		int a = 0, b = 0;
 		
-		int[] pivDP = new int[D-1];	// K = piv[D-3]*a + piv[D-2]*b, a=Ã¹¹øÂ°³¯ ¶±ÀÇ°³¼ö , b=µÎ¹øÂ°³¯ ¶±ÀÇ°³¼ö, D >= 3
+		int[] pivDP = new int[D-1];	// K = piv[D-3]*a + piv[D-2]*b, a=ì²«ë²ˆì§¸ë‚  ë–¡ì˜ê°œìˆ˜ , b=ë‘ë²ˆì§¸ë‚  ë–¡ì˜ê°œìˆ˜, D >= 3
 		pivDP[0] = pivDP[1] = 1;
 		for (int i = 2; i < D-1; i++) {
 			pivDP[i] = pivDP[i-2] + pivDP[i-1];

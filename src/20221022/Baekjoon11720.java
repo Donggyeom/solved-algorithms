@@ -3,7 +3,7 @@ class Main {
 	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
-		br.readLine(); // N ¹ö¸²
+		br.readLine(); // N ë²„ë¦¼
 		String input = br.readLine();
 		int N = input.length();
 		int sum = 0;
@@ -17,6 +17,6 @@ class Main {
 
 
 /**
-  * 11720. ¼ıÀÚÀÇ ÇÕ
+  * 11720. ìˆ«ìì˜ í•©
   * 
 **/
