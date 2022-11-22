@@ -1,0 +1,40 @@
+import java.io.*;
+import java.util.*;
+class Main {
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		int M = Integer.parseInt(br.readLine());
+		String[] input = null;
+		
+		ArrayList<ArrayList<Integer>> E = new ArrayList<ArrayList<Integer>>();
+		for (int i = 0; i < N; i++) {
+			E.add(new ArrayList<Integer>());
+		}
+		
+		for (int i = 0; i < M; i++) {
+			input = br.readLine().split(" ");
+			E.get(Integer.parseInt(input[0])-1).add(Integer.parseInt(input[1])-1);
+			E.get(Integer.parseInt(input[1])-1).add(Integer.parseInt(input[0])-1);
+		}
+		
+		Stack<Integer> dfs = new Stack<>();
+		boolean[] v = new boolean[N];
+		dfs.push(0);
+		int answer = 0;
+		while ( !dfs.isEmpty() ) {
+			int p = dfs.pop();
+			if (v[p]) continue;
+			
+			v[p] = true;
+			answer++;
+			for (int i : E.get(p)) {
+				if (!v[i]) {
+					dfs.push(i);
+				}
+			}
+		}
+		
+		System.out.println(answer);
+	}
+}
