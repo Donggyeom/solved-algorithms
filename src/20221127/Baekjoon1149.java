@@ -11,7 +11,7 @@ class Main {
 		for (int i = 0; i < N; i++) {
 			String[] input = br.readLine().split(" ");
 			for (int j = 0; j < 3; j++) {
-				costs[i][j] = Integer.parseInt(input[i]);
+				costs[i][j] = Integer.parseInt(input[j]);
 			}
 		}
 		
@@ -21,6 +21,13 @@ class Main {
 			dp[i][1] = costs[i-1][1] + (dp[i-1][0] < dp[i-1][2] ? dp[i-1][0] : dp[i-1][2]);
 			dp[i][2] = costs[i-1][2] + (dp[i-1][0] < dp[i-1][1] ? dp[i-1][0] : dp[i-1][1]);
 		}
+		
+//		for (int i = 0; i <= N; i++) {
+//			for (int j = 0; j < 3; j++) {
+//				System.out.print(dp[i][j] + " ");
+//			}
+//			System.out.println();
+//		}
 		
 		System.out.println(Math.min(dp[N][0], Math.min(dp[N][1], dp[N][2])));		
 	}
