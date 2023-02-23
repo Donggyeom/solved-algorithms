@@ -1,74 +1,63 @@
-import java.io.*;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
 
 class Main {
 	
-	static int MAX = 100000;
+	static int N, K, T;
+	static boolean[] visited;
+	static int[] next;
 	
-	public static void main(String[] args) throws Exception {
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String[] input = br.readLine().split(" ");
-		int N = Integer.parseInt(input[0]);
-		int K = Integer.parseInt(input[1]);
-
-		// bfs
-		PriorityQueue<Point> que = new PriorityQueue<>();
-		boolean[] visited = new boolean[MAX+1];
-		que.offer(new Point(N, 0));
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
 		
-		int answer = 0;
-		BFS:
-		while ( !que.isEmpty() ) {
-			int length = que.size();
+		N = sc.nextInt();
+		K = sc.nextInt();
+		T = 0;
+		visited = new boolean[100001];
+		next = new int[3];
+		
+		// N을 +,- 1 또는 *2 해서 가장 빠르게 같아질 수 있는 스텝수
+		bfs();
+		
+		System.out.println(T);
+		sc.close();
+	}
 
-			for (int i = 0 ; i < length; i++) {
-				Point item = que.poll();
-				int point = item.idx;
-				int count = item.count;
+
+	private static void bfs() {
+		
+		Queue<Integer> queue = new LinkedList<>();
+		queue.offer(N);
+		
+		while (!queue.isEmpty()) {
+			for (int i = 0, size = queue.size(); i < size; i++) {
+				int cur = queue.poll();
 				
-				if (point == K) {
-					answer = count;
-					break BFS;
+				if (cur == K) return;
+				
+				next[0] = cur-1;
+				next[1] = cur+1;
+				next[2] = cur*2;
+				
+				for (int j = 0; j < 3; j++) {
+					int np = next[j];
+					if (isValidPoint(np) && !visited[np]) {
+						visited[np] = true;
+						queue.offer(np);
+					}
 				}
-				
-				visited[point] = true;
-			
-				if (point * 2 <= MAX && !visited[point * 2]) {
-					que.offer(new Point(point*2, count+1));
-				}
-				
-				if (point + 1 <= MAX && !visited[point+1]) {
-					que.offer(new Point(point+1, count+1));
-				}
-				
-				if (point - 1 >= 0 && !visited[point-1]) {
-					que.offer(new Point(point-1, count+1));
-				}
-				
+					
 			}
+			T++;
 		}
-		
-		System.out.println(answer);
 	}
-}
-
-class Point implements Comparable<Point> {
-	int idx;
-	int count;
 	
-	public Point(int idx, int count) {
-		this.idx = idx;
-		this.count = count;
-	}
-
-	@Override
-	public int compareTo(Point o) {
-		return this.count - o.count;
+	private static boolean isValidPoint(int cur) {
+		return cur>=0 && cur <= 100000;
 	}
 }
 
 /**
-  * 1697. 숨바꼭질
-  * 
-**/
+ *  1697. 숨바꼭질
+ */
