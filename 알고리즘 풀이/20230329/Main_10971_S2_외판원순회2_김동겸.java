@@ -28,15 +28,20 @@ class Main {
 			}
 		}
 		
-		nextPerm = new int[N+1];
-		for (int i = 0; i < N; i++) {
-			nextPerm[i] = i;
+		nextPerm = new int[N-1];
+		for (int i = 0, length = N-1; i < length; i++) {
+			nextPerm[i] = i+1;
 		}
 		NEXT_PERMUTATION:
 			do {
-				nextPerm[N] = nextPerm[0];
 				int sum = 0;
-				for (int i = 0; i < N; i++) {
+				
+				int startWeight = weights[0][nextPerm[0]];
+				int lastWeight = weights[nextPerm[N-2]][0];
+				if (startWeight == INF || lastWeight == INF) continue NEXT_PERMUTATION;	// 불가능한 경로
+				
+				sum += startWeight + lastWeight;
+				for (int i = 0, length = N-2; i < length; i++) {
 					int s = nextPerm[i];
 					int d = nextPerm[i+1];
 					if (weights[s][d] == INF) continue NEXT_PERMUTATION;	// 불가능한 경로
@@ -50,16 +55,16 @@ class Main {
 	}
 
 	private static boolean np() {
-		int i = N-1;
+		int i = N-2;
 		while (i > 0 && nextPerm[i-1] >= nextPerm[i]) i--;
 		if (i == 0) return false;
 		
-		int j = N-1;
+		int j = N-2;
 		while (nextPerm[i-1] >= nextPerm[j]) j--;
 		
 		swap(i-1, j);
 		
-		j = N-1;
+		j = N-2;
 		while (i < j) {
 			swap(i++, j--);
 		}
