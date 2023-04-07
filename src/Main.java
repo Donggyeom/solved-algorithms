@@ -1,107 +1,109 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.StringTokenizer;
 
-class Main {
+public class Main {
 	
-	static class Point {
-		int x;
-		int y;
-		int key;	// 각 비트 자리가 키 보유 여부를 나타냄
-		public Point(int x, int y, int key) {
-			super();
-			this.x = x;
-			this.y = y;
-			this.key = key;
+	static final int INF = Integer.MAX_VALUE>>2;
+	
+	static class Edge implements Comparable<Edge> {
+		int p;
+		int v;
+		int w;
+		public Edge(int p, int v, int w) {
+			this.p = p;
+			this.v = v;
+			this.w = w;
+		}
+		@Override
+		public int compareTo(Edge o) {
+			return Integer.compare(this.w, o.w);
+		}
+		@Override
+		public String toString() {
+			return "Edge [p=" + p + ", v=" + v + ", w=" + w + "]";
 		}
 	}
 	
-	static int[] dx = { -1,  0,  1,  0 };
-	static int[] dy = {  0,  1,  0, -1 };
+	static int N, M, path[], parents[];
+	static boolean[] visited;
+	static List<Edge>[] edges;
 	
-	static char[][] map;
-	static boolean[][][] visited;
-	static int N, M;
-	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws Exception {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		String[] input = br.readLine().split(" ");
-		N = Integer.parseInt(input[0]);
-		M = Integer.parseInt(input[1]);
-		map = new char[N][];
-		visited = new boolean[(1<<6)][N][M];
-		int startX = 0, startY = 0;
-		for (int i = 0; i < N; i++) {
-			map[i] = br.readLine().toCharArray();
-			for (int j = 0; j < M; j++) {
-				if (map[i][j] == '0') {
-					startX = i;
-					startY = j;
-				}
+		int TC = Integer.parseInt(br.readLine().trim());
+		StringBuilder sb = new StringBuilder(10); 
+		for (int tc = 1; tc <= TC; tc++) {
+			StringTokenizer st = new StringTokenizer(br.readLine());
+			N = Integer.parseInt(st.nextToken());	// 간선 수
+			M = Integer.parseInt(st.nextToken());	// 정점 수
+			parents = new int[M];
+			visited = new boolean[M];
+			int[] D = new int[M];
+			edges = new List[M];
+			for (int i = 0; i < M; i++) {
+				edges[i] = new ArrayList<>();
+				D[i] = INF;
 			}
-		}
-		Queue<Point> bfs = new ArrayDeque<>();
-		bfs.offer(new Point(startX, startY, 0));
-		boolean isExited = false;
-		int step = 0;
-		BFS:
-			while (!bfs.isEmpty()) {
-				for (int i = 0, size = bfs.size(); i < size; i++) {
-					Point p = bfs.poll();
-					int x = p.x;
-					int y = p.y;
-					int key = p.key;
-					if (map[x][y] == '1') {
-						System.out.printf("%d %d %s\n", x, y, Integer.toBinaryString(key));
-						isExited = true;
-						break BFS;
-					}
-					
-					for (int j = 0; j < 4; j++) {
-						int nx = x + dx[j];
-						int ny = y + dy[j];
-						if (!isValidCoord(nx, ny)) continue;
-							
-						key |= updateKey(nx, ny, step);
-						
-						if (canMove(nx, ny, key) && !visited[key][nx][ny]) {
-							bfs.offer(new Point(nx, ny, key));
-							visited[key][nx][ny] = true;
-						}
+			D[0] = 0;
+			parents[0] = -1;
+			for (int i = 0; i < N; i++) {
+				st = new StringTokenizer(br.readLine());
+				int s = Integer.parseInt(st.nextToken());
+				int d = Integer.parseInt(st.nextToken());
+				int w = Integer.parseInt(st.nextToken());
+				edges[s].add(new Edge(s, d, w));
+			}
+			
+			PriorityQueue<Edge> pq = new PriorityQueue<>();
+			pq.offer(new Edge(-1, 0,0));
+			while (!pq.isEmpty()) {
+				Edge cur = pq.poll();
+				if (visited[cur.v]) continue;
+				visited[cur.v] = true;
+				if (cur.v == M-1) break;
+				for (Edge next : edges[cur.v]) {
+					int v = next.v;
+					if (visited[v]) continue;
+					int w = next.w;
+					if (D[v] > D[cur.v] + w) {
+						D[v] = D[cur.v] + w;
+						pq.offer(new Edge(cur.v, v, D[v]));
+						parents[v] = cur.v;
 					}
 				}
-				step++;
 			}
-		
-		if (isExited) System.out.println(step);
-		else System.out.println(-1);
-	}
-
-	private static boolean canMove(int x, int y, int key) {
-		char c = map[x][y];
-		if (c == '#') return false;
-		if (c >= 'A' && c <= 'F') {
-			if (c == 'A') {
-				System.out.printf("A lock %s - %s\n", Integer.toBinaryString(1 << (c - 'A')), Integer.toBinaryString(key));
+			
+			sb.append("Case #").append(tc).append(": ");
+			if (!visited[M-1]) {
+				sb.append("-1");
 			}
-			int lock = 1 << (c - 'A');
-			return (lock & key) > 0;
+			else {
+				int idx = M-1;
+				List<Integer> order = new ArrayList<>();
+				while (idx != -1) {
+					order.add(0, idx);
+					idx = parents[idx];
+				}
+				for (int i : order) {
+					sb.append(i).append(" ");
+				}
+			}
+			sb.append("\n");
 		}
-		return true;
-	}
-
-	private static int updateKey(int x, int y, int step) {
-		if (map[x][y] >= 'a' && map[x][y] <= 'f') {
-			System.out.printf("key : %c step : %d\n", map[x][y], step);
-			return 1 << (map[x][y]-'a');
-		}
-		return 0;
-	}
-
-	private static boolean isValidCoord(int x, int y) {
-		return x >= 0 && x < N && y >= 0 && y < M;
+		System.out.print(sb.toString().trim());
+		br.close();
 	}
 }
 
 /**
- *	1194. 달이 차오른다, 가자
+ *  9694. 무엇을 아느냐가 아니라 누구를 아느냐가 문제다
+ *  
  */
