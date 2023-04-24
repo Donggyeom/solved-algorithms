@@ -2,41 +2,30 @@ import java.util.Arrays;
 
 public class UnionFind {
 	
-	static int N = 5;
-	static int[] parents;
+	static int[] parents = {0,1,2,3,4,5};
 	
-	private static void makeSet() {
-		parents = new int[N];
-		for (int i = 0; i < N; i++) {
-			parents[i] = i;
-		}
+	public static void main(String[] args) {
+		
+		union(1, 3);
+		union(2, 4);
+		
+		System.out.println(Arrays.toString(parents));
+		
+		union(1,2);
+		
+		System.out.println(Arrays.toString(parents));
+		
 	}
 	
-	private static int findSet(int v) {
-		if (v == parents[v]) return v;
-		
+	static int findSet(int v) {
+		if (parents[v] == v) return v;
 		return (parents[v] = findSet(parents[v]));
 	}
 	
-	private static void union(int a, int b) {
+	static void union(int a, int b) {
 		int rootA = findSet(a);
 		int rootB = findSet(b);
-		
 		if (rootA == rootB) return;
-		
 		parents[rootB] = rootA;
 	}
-
-	public static void main(String[] args) {
-		makeSet();
-		
-		union(2, 4);
-		
-		union(1, 4);
-		
-		findSet(4);
-		
-		System.out.println(Arrays.toString(parents));
-	}
-
 }
