@@ -29,8 +29,12 @@ public class Main {
 		}
 		
 		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < N; i++)
-			sb.append(Arrays.toString(adjMatrix[i]).replaceAll("[\\[\\],]", "")).append("\n");
+		for (int i = 0; i < N; i++) {
+			for (int j = 0; j < N; j++) {
+				sb.append(adjMatrix[i][j]).append(" ");
+			}
+			sb.append("\n");
+		}
 		System.out.println(sb);
 	}
 }
