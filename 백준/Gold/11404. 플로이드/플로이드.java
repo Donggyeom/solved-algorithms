@@ -29,15 +29,15 @@ public class Main {
 			int end = Integer.parseInt(input[1]);
 			int cost = Integer.parseInt(input[2]);
 			
-			edgeArray[begin][end] = edgeArray[begin][end] > cost ? cost : edgeArray[begin][end];
+			edgeArray[begin][end] = Math.min(edgeArray[begin][end], cost);
 		}
 		
 		for (int k = 1; k <= n; k++) {
 			for (int i = 1; i <= n; i++) {
 				for (int j = 1; j <= n; j++) {
 					if (k == i || k == j) continue;
-					if (edgeArray[i][j] > edgeArray[i][k] + edgeArray[k][j])
-						edgeArray[i][j] = Integer.min(edgeArray[i][k] + edgeArray[k][j], MAX);
+					
+					edgeArray[i][j] = Math.min(edgeArray[i][k] + edgeArray[k][j], edgeArray[i][j]);
 				}
 			}
 		}
