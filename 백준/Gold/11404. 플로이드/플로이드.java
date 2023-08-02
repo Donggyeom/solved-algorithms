@@ -3,7 +3,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 
 public class Main {
-	static final int MAX = 123456789;
+	static final int MAX = 123_456_789;
 	static int n, m;
 	static int[][] edgeArray;
 	
@@ -36,11 +36,8 @@ public class Main {
 			for (int i = 1; i <= n; i++) {
 				for (int j = 1; j <= n; j++) {
 					if (k == i || k == j) continue;
-					if (edgeArray[i][k] == MAX || edgeArray[k][j] == MAX) continue;
-					
-					if (edgeArray[i][j] > edgeArray[i][k] + edgeArray[k][j]) {
-						edgeArray[i][j] = edgeArray[i][k] + edgeArray[k][j];
-					}
+					if (edgeArray[i][j] > edgeArray[i][k] + edgeArray[k][j])
+						edgeArray[i][j] = Integer.min(edgeArray[i][k] + edgeArray[k][j], MAX);
 				}
 			}
 		}
@@ -48,8 +45,8 @@ public class Main {
 		StringBuilder sb = new StringBuilder(10);
 		for (int i = 1; i <= n; i++) {
 			for (int j = 1; j <= n; j++) {
-				if (edgeArray[i][j] == MAX) edgeArray[i][j] = 0;
-				sb.append(edgeArray[i][j]).append(" ");
+				if (edgeArray[i][j] == MAX) sb.append("0 "); 
+				else sb.append(edgeArray[i][j]).append(" ");
 			}
 			sb.append("\n");
 		}
